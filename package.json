@@ -3,17 +3,28 @@
   "version": "0.1.0",
   "description": "Broadcast a single prompt to multiple LLMs simultaneously, streamed side-by-side in the terminal.",
   "bin": {
-    "council": "./bin/council.js"
+    "council": "./dist/council.js"
   },
   "type": "module",
-  "main": "src/index.js",
+  "main": "dist/council.js",
+  "files": [
+    "dist/",
+    "gateway/",
+    "bin/"
+  ],
   "scripts": {
-    "start": "tsx bin/council.js",
-    "setup": "tsx bin/council.js setup",
+    "build": "node build.mjs",
+    "start": "node dist/council.js",
+    "setup": "node dist/council.js setup",
+    "dev": "tsx bin/council.js",
+    "dev:setup": "tsx bin/council.js setup",
+    "prepublishOnly": "npm run build",
     "format": "prettier --write ."
   },
   "devDependencies": {
-    "prettier": "^3.8.3"
+    "esbuild": "^0.28.0",
+    "prettier": "^3.8.3",
+    "tsx": "^4.21.0"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.20.0",
@@ -24,7 +35,6 @@
     "inquirer": "^10.0.0",
     "openai": "^4.0.0",
     "ora": "^8.0.0",
-    "react": "^18.0.0",
-    "tsx": "^4.21.0"
+    "react": "^18.0.0"
   }
 }

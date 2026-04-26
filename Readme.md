@@ -71,7 +71,6 @@ On launch, council automatically detects Docker and starts the LiteLLM gateway. 
 | `←` / `→` | Switch focused panel |
 | `↑` / `↓` | Scroll focused panel |
 | `Ctrl+C` | Quit (and stop gateway) |
-| `Ctrl+S` | Re-run setup |
 
 ## Supported Models
 

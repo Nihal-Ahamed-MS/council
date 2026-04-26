@@ -1,3 +1,5 @@
 node_modules/
 council.log
 .env
+build/
+dist/

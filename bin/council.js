@@ -1,9 +1,10 @@
-#!/usr/bin/env tsx
-import { createRequire } from 'module';
+#!/usr/bin/env node
 import { fileURLToPath } from 'url';
 import path from 'path';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+// Resolve package root before any imports so lifecycle.js can find gateway/
+// Works correctly whether running from src/ (dev) or dist/ (installed bundle)
+process.env.COUNCIL_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 const arg = process.argv[2];
 

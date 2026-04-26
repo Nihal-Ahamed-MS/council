@@ -4,8 +4,11 @@ import { fileURLToPath } from 'url';
 import { isGatewayHealthy } from './detect.js';
 import { logger } from '../logger.js';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const GATEWAY_DIR = path.resolve(__dirname, '../../gateway');
+// COUNCIL_ROOT is set by bin/council.js before any imports.
+// Falls back to relative path for direct `tsx src/` dev runs.
+const GATEWAY_DIR = process.env.COUNCIL_ROOT
+  ? path.join(process.env.COUNCIL_ROOT, 'gateway')
+  : path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../gateway');
 
 let gatewayProcess = null;
 let shutdownRegistered = false;
