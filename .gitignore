@@ -3,3 +3,4 @@ council.log
 .env
 build/
 dist/
+/gateway/litellm_config.yaml
