@@ -59,7 +59,7 @@ export async function runSetup() {
 
     const { key } = await inquirer.prompt([
       {
-        type: 'text',
+        type: 'password',
         name: 'key',
         message: `${provider.name} API key:`,
         validate: (v) => v.trim().length > 0 || 'API key cannot be empty',
@@ -108,7 +108,7 @@ export async function runSetup() {
   yamlSpinner.succeed('Gateway config written');
 
   // 7. Health check gateway
-  const gatewaySpinner = ora('Testing gateway health…').start();
+  const gatewaySpinner = ora('Testing gateway health...').start();
   const healthy = await isGatewayHealthy('http://localhost:4000');
   if (healthy) {
     logger.info('Gateway already healthy at setup time');

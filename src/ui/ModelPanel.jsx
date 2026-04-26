@@ -52,9 +52,9 @@ export function ModelPanel({ model, tokens, error, isStreaming, isFocused, width
           {error
             ? `error: ${error}`
             : isStreaming
-              ? 'streaming…'
+              ? 'streaming...'
               : tokens.length === 0
-                ? 'waiting…'
+                ? 'waiting...'
                 : `${lines.length} lines`}
         </Text>
       </Box>

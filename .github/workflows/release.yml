@@ -1,0 +1,61 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          registry-url: https://registry.npmjs.org
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build bundle
+        run: npm run build
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/council.js
+          generate_release_notes: true
+
+      # - name: Publish to npm
+      #   run: npm publish
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Update Homebrew formula
+        env:
+          HOMEBREW_TAP_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+        run: |
+          VERSION=${{ github.ref_name }}
+          TARBALL_URL="https://github.com/Nihal-Ahamed-MS/council/archive/refs/tags/${VERSION}.tar.gz"
+
+          SHA256=$(curl -sL "$TARBALL_URL" | shasum -a 256 | awk '{print $1}')
+
+          git clone "https://x-access-token:${HOMEBREW_TAP_TOKEN}@github.com/Nihal-Ahamed-MS/homebrew-council.git" tap
+          cd tap
+
+          sed -i "s|url .*|url \"${TARBALL_URL}\"|" Formula/council.rb
+          sed -i "s|sha256 .*|sha256 \"${SHA256}\"|" Formula/council.rb
+          sed -i "s|version .*|version \"${VERSION#v}\"|" Formula/council.rb
+
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
+          git commit -am "Update council to ${VERSION}"
+          git push

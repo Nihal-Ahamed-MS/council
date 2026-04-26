@@ -11,7 +11,6 @@ await esbuild.build({
   format: 'esm',
   outfile: 'dist/council.js',
   jsx: 'transform',
-  // fsevents is macOS-only native module; react-devtools-core is an optional ink dep
   external: ['fsevents', 'react-devtools-core'],
   banner: {
     js: '#!/usr/bin/env node',
