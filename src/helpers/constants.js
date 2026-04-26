@@ -1,0 +1,51 @@
+export const PROVIDERS = [
+  {
+    name: 'OpenAI  (gpt-4o)',
+    value: 'openai',
+    envKey: 'OPENAI_API_KEY',
+    modelId: 'openai/gpt-4o',
+    label: 'GPT-4o',
+  },
+  {
+    name: 'Anthropic (claude-3-5-sonnet-latest)',
+    value: 'anthropic',
+    envKey: 'ANTHROPIC_API_KEY',
+    modelId: 'anthropic/claude-3-5-sonnet-latest',
+    label: 'Claude 3.5',
+  },
+  {
+    name: 'Google (gemini-2.5-flash)',
+    value: 'gemini',
+    envKey: 'GEMINI_API_KEY',
+    modelId: 'gemini/gemini-2.5-flash',
+    label: 'Gemini 2.5',
+  },
+  {
+    name: 'Groq (llama-3.3-70b-versatile)',
+    value: 'groq',
+    envKey: 'GROQ_API_KEY',
+    modelId: 'groq/llama-3.3-70b-versatile',
+    label: 'Llama 3.3',
+  },
+  {
+    name: 'Mistral (mistral-large-latest)',
+    value: 'mistral',
+    envKey: 'MISTRAL_API_KEY',
+    modelId: 'mistral/mistral-large-latest',
+    label: 'Mistral Large',
+  },
+  {
+    name: 'xAI (grok-3)',
+    value: 'xai',
+    envKey: 'XAI_API_KEY',
+    modelId: 'xai/grok-3',
+    label: 'Grok 3',
+  },
+  {
+    name: 'Ollama (llama3, local)',
+    value: 'ollama',
+    envKey: null,
+    modelId: 'ollama/llama3',
+    label: 'Llama 3',
+  },
+];

@@ -1,1 +1,148 @@
-#### Council
+# Council
+
+A terminal app that broadcasts a single prompt to multiple LLMs simultaneously and streams responses side-by-side in split panels.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ [ gateway mode ]  4/4 models active          ^C quit  ^S setup  ↑↓ scroll  │
+├──────────────────┬──────────────────┬──────────────────┬────────────────────┤
+│ GPT-4o           │ Claude 3.5       │ Gemini 2.5       │ Llama 3            │
+│                  │                  │                  │                    │
+│ The answer is... │ Here's what I    │ Great question!  │ Let me think...    │
+│                  │ think about it...│                  │                    │
+├──────────────────┴──────────────────┴──────────────────┴────────────────────┤
+│ > Type your prompt here and press Enter                                      │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+## Features
+
+- Broadcasts one prompt to all active models in parallel
+- Streams tokens in real time — all panels update simultaneously
+- Two modes: **gateway mode** (LiteLLM via Docker) and **sdk mode** (direct API calls)
+- Independently scrollable panels per model
+- Keyboard navigation between panels
+- Graceful Docker compose up/down on launch and exit
+
+## Requirements
+
+- Node.js 18+
+- Docker Desktop (optional — needed for Ollama and gateway mode)
+- API keys for the providers you want to use
+
+## Install
+
+```bash
+npm install -g .
+```
+
+## Usage
+
+**First-time setup** — configure providers and API keys:
+
+```bash
+council setup
+# or
+npm run setup
+```
+
+**Launch the TUI:**
+
+```bash
+council
+# or
+npm start
+```
+
+## Modes
+
+| Mode | When | Models |
+|---|---|---|
+| **gateway mode** | Docker is running | OpenAI, Anthropic, Gemini, Ollama |
+| **sdk mode ⚠** | Docker not running | OpenAI, Anthropic, Gemini only |
+
+On launch, council automatically detects Docker and starts the LiteLLM gateway. On exit (`Ctrl+C`), it runs `docker compose down` to clean up.
+
+## Keyboard Shortcuts
+
+| Key | Action |
+|---|---|
+| `Enter` | Send prompt to all models |
+| `←` / `→` | Switch focused panel |
+| `↑` / `↓` | Scroll focused panel |
+| `Ctrl+C` | Quit (and stop gateway) |
+| `Ctrl+S` | Re-run setup |
+
+## Supported Models
+
+| Provider | Model | Requires |
+|---|---|---|
+| OpenAI | `openai/gpt-4o` | `OPENAI_API_KEY` |
+| Anthropic | `anthropic/claude-3-5-sonnet-latest` | `ANTHROPIC_API_KEY` |
+| Google | `gemini/gemini-2.5-flash` | `GEMINI_API_KEY` |
+| Ollama | `ollama/llama3` | Docker + Ollama running locally |
+
+## Config
+
+Stored at `~/.council/config.json` after running setup.
+
+```json
+{
+  "gateway": {
+    "baseUrl": "http://localhost:4000",
+    "apiKey": "sk-council-local"
+  },
+  "models": [
+    { "id": "openai/gpt-4o",                     "label": "GPT-4o",      "enabled": true },
+    { "id": "anthropic/claude-3-5-sonnet-latest", "label": "Claude 3.5",  "enabled": true },
+    { "id": "gemini/gemini-2.5-flash",            "label": "Gemini 2.5",  "enabled": true },
+    { "id": "ollama/llama3",                      "label": "Llama 3",     "enabled": true }
+  ],
+  "keys": {
+    "OPENAI_API_KEY": "sk-...",
+    "ANTHROPIC_API_KEY": "sk-ant-...",
+    "GEMINI_API_KEY": "AIza..."
+  }
+}
+```
+
+## Project Structure
+
+```
+council/
+├── bin/council.js          # CLI entry point
+├── src/
+│   ├── index.js            # Boot sequence
+│   ├── config.js           # ~/.council/config.json read/write
+│   ├── logger.js           # File logger → council.log
+│   ├── gateway/
+│   │   ├── detect.js       # Docker + health checks
+│   │   ├── lifecycle.js    # docker compose up/down
+│   │   └── client.js       # SSE streaming via LiteLLM
+│   ├── adapters/
+│   │   ├── index.js        # Unified streamModel() interface
+│   │   ├── openai.js       # Direct OpenAI SDK
+│   │   ├── anthropic.js    # Direct Anthropic SDK
+│   │   └── gemini.js       # Direct Gemini SDK
+│   └── ui/
+│       ├── App.jsx         # Root layout and state
+│       ├── ModelPanel.jsx  # Per-model scrollable panel
+│       ├── PromptBar.jsx   # Bottom input bar
+│       └── StatusBar.jsx   # Top status bar
+├── gateway/
+│   ├── docker-compose.yml  # LiteLLM on :4000
+│   ├── litellm_config.yaml # Generated by setup
+│   └── prometheus.yml      # Optional metrics
+└── scripts/setup.js        # Interactive setup wizard
+```
+
+## Logs
+
+Logs are written to `council.log` in the directory where you run the command.
+
+## Tech Stack
+
+- **Runtime:** Node.js
+- **TUI:** [Ink](https://github.com/vadimdemedes/ink) (React for terminals)
+- **Gateway:** [LiteLLM](https://github.com/BerriAI/litellm) (Docker)
+- **SDK fallbacks:** `openai`, `@anthropic-ai/sdk`, `@google/generative-ai`
