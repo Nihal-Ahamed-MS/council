@@ -78,13 +78,13 @@ jobs:
             -e "s|version \".*\"|version \"${VERSION#v}\"|" \
             -e "s|sha256 \".*\"|sha256 \"${SHA}\"|" \
             -e "s|url \".*\"|url \"${TARBALL_URL}\"|" \
-            formula/council.rb
+            Formula/council.rb
 
       - name: Commit updated formula
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add formula/council.rb
+          git add Formula/council.rb
           git commit -m "chore: update formula to ${VERSION}"
           git pull --rebase origin main
           git push origin HEAD:main
