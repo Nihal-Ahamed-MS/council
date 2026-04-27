@@ -1,4 +1,4 @@
-class Council < Formula
+class Council < formula
   desc "Multi-LLM terminal chat CLI — broadcast prompts to multiple LLMs side-by-side"
   homepage "https://github.com/Nihal-Ahamed-MS/council"
   # Update url + sha256 after each GitHub release
