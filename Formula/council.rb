@@ -1,10 +1,10 @@
 class Council < Formula
   desc "Multi-LLM terminal chat CLI — broadcast prompts to multiple LLMs side-by-side"
   homepage "https://github.com/Nihal-Ahamed-MS/council"
-  url "https://github.com/Nihal-Ahamed-MS/council/archive/refs/tags/v0.1.5.tar.gz"
-  sha256 "a77ee2524d4fed6b2527e5b0f2242b6c555d2c2b815d8f5fabc22551d63edc6b"
+  url "https://github.com/Nihal-Ahamed-MS/council/archive/refs/tags/v0.1.6.tar.gz"
+  sha256 "030f9627dd5842bc19d610a83e528d1f23b4d3b1bc22b3a7176b0c7392e177a4"
   license "MIT"
-  version "0.1.5"
+  version "0.1.6"
 
   depends_on "node"
 
