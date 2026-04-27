@@ -16,7 +16,7 @@ export async function isGatewayHealthy(baseUrl = 'http://localhost:4000') {
   try {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 3000);
-    const res = await fetch(`${baseUrl}/health`, { signal: controller.signal });
+    const res = await fetch(`${baseUrl}/health/liveliness`, { signal: controller.signal });
     clearTimeout(timer);
     logger.debug('Gateway health check', { baseUrl, ok: res.ok, status: res.status });
     return res.ok;

@@ -12,6 +12,10 @@ jobs:
     permissions:
       contents: write
 
+    defaults:
+      run:
+        working-directory: .
+
     steps:
       - uses: actions/checkout@v4
 
@@ -26,6 +30,9 @@ jobs:
 
       - name: Build bundle
         run: npm run build
+
+      - name: Verify build output
+        run: test -f dist/council.js
 
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
