@@ -12,9 +12,6 @@ await esbuild.build({
   outfile: 'dist/council.js',
   jsx: 'transform',
   external: ['fsevents', 'react-devtools-core'],
-  banner: {
-    js: '#!/usr/bin/env node',
-  },
 });
 
 console.log('✓ dist/council.js');
