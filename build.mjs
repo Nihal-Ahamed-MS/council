@@ -11,7 +11,7 @@ await esbuild.build({
   format: 'esm',
   outfile: 'dist/council.js',
   jsx: 'transform',
-  external: ['fsevents', 'react-devtools-core'],
+  external: ['fsevents'],
 });
 
 console.log('✓ dist/council.js');
