@@ -63,20 +63,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Download checksum
+      - name: Fetch tarball checksum
         run: |
           VERSION=${GITHUB_REF_NAME}
-          BASE="https://github.com/Nihal-Ahamed-MS/council/releases/download/${VERSION}"
-          SHA=$(curl -sL "${BASE}/council.js.sha256" | awk '{print $1}')
+          TARBALL_URL="https://github.com/Nihal-Ahamed-MS/council/archive/refs/tags/${VERSION}.tar.gz"
+          SHA=$(curl -sL "${TARBALL_URL}" | shasum -a 256 | awk '{print $1}')
           echo "SHA=${SHA}" >> $GITHUB_ENV
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
+          echo "TARBALL_URL=${TARBALL_URL}" >> $GITHUB_ENV
 
       - name: Update Homebrew formula
         run: |
           sed -i \
             -e "s|version \".*\"|version \"${VERSION#v}\"|" \
             -e "s|sha256 \".*\"|sha256 \"${SHA}\"|" \
-            -e "s|/download/v[^/]*/|/download/${VERSION}/|g" \
+            -e "s|url \".*\"|url \"${TARBALL_URL}\"|" \
             formula/council.rb
 
       - name: Commit updated formula
