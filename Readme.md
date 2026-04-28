@@ -2,6 +2,7 @@
 
 A terminal-based chat app built on top of LiteLLM Gateway to query all your favorite LLMs at once using.
 
+![council.gif](/assets/council.gif)
 
 ## Features
 
